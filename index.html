@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Game "The Life"</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+        button {
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #startBtn {
+            background-color: green;
+        }
+        #pauseBtn {
+            background-color: grey;
+        }
+        #resetBtn {
+            background-color: red;
+        }
+        #shuffleBtn {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="500px" height="500px"></canvas>
+    <div>
+        <button id="startBtn">Start</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="resetBtn">Reset</button>
+        <button id="shuffleBtn">Shuffle</button>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
