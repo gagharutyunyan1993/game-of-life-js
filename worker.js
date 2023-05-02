@@ -22,16 +22,17 @@ self.addEventListener("message", (event) => {
 
 function countNeighbors(board, row, col) {
     let count = 0;
-    const rowStart = Math.max(row - 1, 0);
-    const colStart = Math.max(col - 1, 0);
-    const rowEnd = Math.min(row + 1, board.length - 1);
-    const colEnd = Math.min(col + 1, board[0].length - 1);
-    for (let i = rowStart; i <= rowEnd; i++) {
-        for (let j = colStart; j <= colEnd; j++) {
-            if (i === row && j === col) {
+    const rows = board.length;
+    const cols = board[0].length;
+
+    for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+            if (i === 0 && j === 0) {
                 continue;
             }
-            if (board[i][j]) {
+            const newRow = (row + i + rows) % rows;
+            const newCol = (col + j + cols) % cols;
+            if (board[newRow][newCol]) {
                 count++;
             }
         }
