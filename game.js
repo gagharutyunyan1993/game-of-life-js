@@ -9,13 +9,14 @@ let gameBoard = createBoard();
 
 let isRunning = false;
 let animationId = null;
+let pendingChanges = [];
 
 const worker = new Worker("worker.js");
 
 document.getElementById("startBtn").addEventListener("click", () => {
     if (!isRunning) {
         isRunning = true;
-        worker.postMessage({gameBoard}); // send current game board to worker
+        worker.postMessage({gameBoard});
     }
 });
 
@@ -41,10 +42,16 @@ document.getElementById("shuffleBtn").addEventListener("click", () => {
 });
 
 worker.addEventListener("message", (event) => {
-    gameBoard = event.data; // receive new game board from worker
+    gameBoard = event.data;
+
+    pendingChanges.forEach(change => {
+        gameBoard[change.row][change.col] = !gameBoard[change.row][change.col];
+    });
+    pendingChanges = [];
+
     drawBoard();
     if (isRunning) {
-        animationId = requestAnimationFrame(() => worker.postMessage({gameBoard})); // send current game board to worker again
+        animationId = requestAnimationFrame(() => worker.postMessage({gameBoard}));
     }
 });
 
@@ -71,8 +78,12 @@ function drawBoard() {
 }
 
 function toggleCell(row, col) {
-    gameBoard[row][col] = !gameBoard[row][col];
-    drawBoard();
+    if (!isRunning) {
+        gameBoard[row][col] = !gameBoard[row][col];
+        drawBoard();
+    } else {
+        pendingChanges.push({row, col});
+    }
 }
 
 canvas.addEventListener("click", (event) => {
