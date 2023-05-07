@@ -2,8 +2,8 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 const CELL_SIZE = 10;
-const ROWS = 1000;
-const COLS = 1000;
+const ROWS = 100;
+const COLS = 100;
 
 let gameBoard = createBoard();
 
@@ -56,13 +56,25 @@ worker.addEventListener("message", (event) => {
 });
 
 function createBoard(random = false) {
-    const board = new Array(ROWS);
-    for (let i = 0; i < ROWS; i++) {
-        board[i] = new Array(COLS);
-        for (let j = 0; j < COLS; j++) {
-            board[i][j] = random ? Math.random() < 0.5 : false;
+    const board = new Array(ROWS + 2);
+    for (let i = 0; i < ROWS + 2; i++) {
+        board[i] = new Array(COLS + 2);
+        for (let j = 0; j < COLS + 2; j++) {
+            if (random) {
+                board[i][j] = Math.random() < 0.5;
+            } else {
+                board[i][j] = false;
+            }
         }
     }
+
+    // TODO: I left this part of the code to show how the "Glider" figure goes beyond one edge of the field and appears from the other
+    board[0][1] = true;
+    board[1][2] = true;
+    board[2][0] = true;
+    board[2][1] = true;
+    board[2][2] = true;
+
     return board;
 }
 
